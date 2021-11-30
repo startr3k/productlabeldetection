@@ -20,8 +20,6 @@ The environment variables in the following files need to be modified based on yo
 
 * main.py (Flask)
 * DocAI.py
-* functions/extractImgMadeInAustralia/main.py
-* functions/extractTextMadeInAustralia/main.py
 
 The variables to modify are :
 
