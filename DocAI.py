@@ -18,7 +18,7 @@ PROJECT_ID = ''
 LOCATION = 'us' # Format is 'us' or 'eu'
 BUCKET = ''
 BUCKET_EXTRACT = ''
-DATASTORE_KIND = 'Extractions'
+DATASTORE_EXTRACT = 'Extractions'
 
 
 from google.cloud import documentai_v1beta3, documentai_v1beta2, language_v1, storage, datastore
@@ -248,8 +248,8 @@ def query_datastore(filename):
     # Instantiates a client
     client = datastore.Client()
     # The Cloud Datastore key for the new entity
-    query = client.query(kind=DATASTORE_KIND)
-    key = client.key(DATASTORE_KIND, filename)
+    query = client.query(kind=DATASTORE_EXTRACT)
+    key = client.key(DATASTORE_EXTRACT, filename)
     query.key_filter(key,'=')
     # Prepares the new entity
     results = list(query.fetch())
