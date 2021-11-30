@@ -13,7 +13,7 @@
  limitations under the License.
  """
 
-# global variables
+# CHANGE THESE GLOBAL VARIABLES
 PROJECT_ID = ''
 LOCATION = 'us' # Format is 'us' or 'eu'
 BUCKET = ''
