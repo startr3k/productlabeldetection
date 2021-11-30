@@ -23,7 +23,7 @@ import middleware
 from middleware import jwt_authenticated, logger, getDisplayName
 from google.cloud import datastore, storage
 
-# global variables
+# CHANGE THESE GLOBAL VARIABLES
 BUCKET_LABEL = ''
 DATASTORE_USER = 'Users'
 
