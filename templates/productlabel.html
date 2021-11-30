@@ -1,0 +1,47 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="/table.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <script src="/package.js"></script>
+
+  <title>Product Label Detection</title>
+  <style type="text/css">
+
+  </style>
+
+  <script>
+
+  </script>
+</head>
+
+<body class="htmlNoPages">
+
+  <nav class="black">      
+      <a style='padding-left: 10px;'>Welcome {{user}}</a>
+      <a class="brand-logo center">Product Label Detection</a>
+  </nav>
+  <ul class="left" id="nav-mobile">
+    <div class="wrapper">
+      <button class="btn default" id="readLabelBtn" onclick="readLabel()">Read Label</button>
+    </div>
+  </ul>
+
+    <aside class="thumbnails" id="pictures">
+
+    {% for product in products %}
+    <a href="#" class="thumbnail" data-big="/{{product}}" onclick="displayProduct(this);">
+      <div class="thumbnail-image" style="background-image: url('https://storage.googleapis.com/ir0nmanproductlabel/{{product}}')"></div>
+    </a>
+    {% endfor %}
+
+    </aside>
+
+  <div class="productlabel" id="productlabel"><input type="hidden" id="labelme" value="/{{firstProduct}}"></div>
+
+  <div class="extract" id ="extract"><table class="styled-table" id="ingredients">{{ingredients}}</table><p style="font-weight: bold;"><br>{{others}}</p></div>
+
+
+</body>
+</html>

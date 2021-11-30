@@ -1,0 +1,3 @@
+google-cloud-automl
+google-cloud-storage
+pillow

@@ -1,0 +1,40 @@
+<html lang=en xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>DocAI Product Label Detection Demo</title>
+  <link rel="stylesheet" href="/login.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first-->
+  <script src="https://www.gstatic.com/firebasejs/7.18/firebase-app.js"></script>
+  <!-- Add Firebase Auth service-->
+  <script src="https://www.gstatic.com/firebasejs/7.18/firebase-auth.js"></script>
+  <script src="/config.js"></script>
+  <script src="/firebase.js"></script>
+  <style>
+         button img{
+         vertical-align: middle;
+         }
+  </style>
+</head>
+<body class="black">
+  <nav class="black">
+    <a class="brand-logo center" href="#!">DocAI Product Label Detection Demo</a>
+  </nav>
+
+  <div class="form-box">
+    <div class="header-text">
+      Login
+    </div><input placeholder="Your Email Address" type="text" id="username"> <input placeholder="Your Password" type="password" id="password"> <button id="signInButton">login</button><button id="googleButton" style="background-color: white;"><img src="./google_logo.png"><font color="black">  Continue with Google</font></button>
+  </div>
+
+  <div class="section" id="form">
+
+
+  </div>
+  <script>
+    document.getElementById("signInButton").addEventListener("click", signIn);
+    document.getElementById("googleButton").addEventListener("click", signInGoogle);
+  </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+}
+html {
+  line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, "Google Sans",Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.87)
+}
+body {
+  background-color: transparent;
+}
+.productlabel {
+  position: absolute;
+  background-image: none;
+  background-color: transparent;
+  content: url("https://storage.googleapis.com/ir0nmanproductlabel/0.gif");
+  left: 300px;
+  top: 124px;
+  width: 988px;
+}
+.extract {
+  position: absolute;
+  top: 124px;
+  width: 620px;
+  left: 1353px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+/* CSS */
+.button-17 {
+  align-items: center;
+  left: 1353px;
+  appearance: none;
+  background-color: #fff;
+  border-radius: 24px;
+  border-width: thick;
+  border-color: #e7e7e7;
+  box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+  box-sizing: border-box;
+  color: #3c4043;
+  cursor: pointer;
+  display: inline-flex;
+  fill: currentcolor;
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  height: 48px;
+  justify-content: center;
+  letter-spacing: .25px;
+  line-height: normal;
+  max-width: 100%;
+  overflow: visible;
+  padding: 2px 24px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1),opacity 15ms linear 30ms,transform 270ms cubic-bezier(0, 0, .2, 1) 0ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: auto;
+  will-change: transform,opacity;
+  z-index: 0;
+}
+
+.button-17:hover {
+  background: #F6F9FE;
+  color: #174ea6;
+}
+
+.button-17:active {
+  box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
+}
+
+.button-17:focus {
+  border: 2px solid #4285f4;
+}
+
+.button-17:not(:disabled) {
+  box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+}
+
+.button-17:not(:disabled):hover {
+  box-shadow: rgba(60, 64, 67, .3) 0 2px 3px 0, rgba(60, 64, 67, .15) 0 6px 10px 4px;
+}
+
+.button-17:not(:disabled):focus {
+  box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+}
+
+.button-17:not(:disabled):active {
+  box-shadow: rgba(60, 64, 67, .3) 0 4px 4px 0, rgba(60, 64, 67, .15) 0 8px 12px 6px;
+}
+
+.button-17:disabled {
+  box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+}
+
+.btn {
+  border: solid black;
+  border-width: thick;
+  border-radius: 24px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  align-items: center;
+  left: 1453px;
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  height: 48px;
+  justify-content: center;
+  letter-spacing: .25px;
+  line-height: normal;
+  max-width: 100%;
+  overflow: visible;
+  padding: 2px 24px;
+  position: relative;
+  text-align: center;
+}
+
+
+/* Gray */
+.default {
+  border-color: #bababa;
+  color: black;
+}
+
+.default:hover {
+  background: #bababa;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  left: 1053px;
+
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .button-17 {
+  background-color: #F6F9FE;;
+}
+
+.wrapper {
+  display: inline-block;
+}
+
+.black {
+  background-color: #000 !important
+}
+
+nav {
+  color: #fff;
+  background-color: #ee6e73;
+  width: 100%;
+  height: 56px;
+  line-height: 56px
+}
+
+nav .brand-logo {
+  position: absolute;
+  color: #fff;
+  display: inline-block;
+  font-size: 2.1rem;
+  font-weight: bold;
+  padding: 0
+}
+
+nav .brand-logo.center {
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%)
+}
+
+
+@media only screen and (min-width: 0) {
+  html {
+    font-size: 14px
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  html {
+    font-size: 14.5px
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  html {
+    font-size: 15px
+  }
+}
+
+
+.primary,
+.thumbnails {
+  display: table-cell;
+}
+
+.thumbnails {
+  width: 300px;
+
+}
+
+.primary {
+  width: 600px;
+  height: 400px;
+  background-color: #cccccc;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.thumbnail:hover .thumbnail-image, .selected .thumbnail-image {
+  border: 4px solid red;
+}
+
+.thumbnail-image {
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: 4px solid transparent;
+}
+
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    font-size: 1.2em;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
