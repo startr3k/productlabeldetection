@@ -63,10 +63,11 @@ The variables to modify are :
 
 5a. Create entities in Datastore under Kind = DATASTORE_USER, ID = Numeric ID (auto generated). Add property, where 
 
-   name = **Email** and value = <Gmail/Google email addresses>
+   name = **Email** and value = <Gmail/Google email addresses> (Google IdP) or <any email address>
    
-5b. Alternatively if Google IdP is not required, create the user in Identity Platform with email and password
-
+5b. If Google IdP is not required, create the user in Identity Platform with email and password
+ 
+  (For Google IdP, by default auto sign up is enabled, so the user will be added automatically)
 
 ## Train AutoML Vision Object Detection
 
