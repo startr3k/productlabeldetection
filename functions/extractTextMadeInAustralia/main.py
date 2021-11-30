@@ -16,7 +16,7 @@ def extractTextMadeInAustralia(event, context):
     # Get env variables
     BUCKET_EXTRACT = file['bucket']
     PROJECT_ID = os.environ['PROJECT_ID']
-    DATASTORE_KIND = os.environ['DATASTORE_KIND']
+    DATASTORE_EXTRACT = os.environ['DATASTORE_EXTRACT']
     filename = file['name']
     
     input_uri = "gs://" +BUCKET_EXTRACT +"/" +filename
@@ -76,7 +76,7 @@ def extractTextMadeInAustralia(event, context):
     client = datastore.Client()
     # The Cloud Datastore key for the new entity
 
-    complete_key = client.key(DATASTORE_KIND, filename)
+    complete_key = client.key(DATASTORE_EXTRACT, filename)
 
     task = datastore.Entity(key=complete_key)
 
