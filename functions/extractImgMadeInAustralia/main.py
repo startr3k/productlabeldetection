@@ -75,7 +75,7 @@ def extractImgMadeInAustralia(event, context):
     img_crop.save(img_byte_array, format="GIF")
     img_byte_array.seek(0)
 
-    destination_bucket = client.get_bucket("ir0nmanlabelextracted")
+    destination_bucket = client.get_bucket(os.environ['BUCKET_EXTRACT'])
     destination_blob = destination_bucket.blob(file['name'])
     destination_blob.upload_from_string(img_byte_array.getvalue(), content_type='image/gif')
 
