@@ -115,4 +115,6 @@ Run the following, replacing MODEL_ID with value obtained above :
 
 ***(By default Cloud Run uses the default compute engine service account. If a separate service account is required, just change the commands above accordingly)***
 
-
+# Architecture Diagram
+ 
+ ![alt text](https://github.com/startr3k/productlabeldetection/blob/main/PLD.drawio.png?raw=true)
