@@ -86,7 +86,7 @@ The variables to modify are :
 
 Run the following, replacing MODEL_ID with value obtained above :
 
-    gcloud functions deploy extractImgMadeInAustralia --runtime python39 --trigger-resource <BUCKET_LABEL> --trigger-event google.storage.object.finalize --memory=1024MB --set-env-vars PROJECT_ID=<PROJECT_ID>,MODEL_ID=<MODEL_ID> --service-account=<COMPUTE_ENGINE_DEFAULT_SERVICE_ACCOUNT>
+    gcloud functions deploy extractImgMadeInAustralia --runtime python39 --trigger-resource <BUCKET_LABEL> --trigger-event google.storage.object.finalize --memory=1024MB --set-env-vars PROJECT_ID=<PROJECT_ID>,MODEL_ID=<MODEL_ID>,BUCKET_EXTRACT=<BUCKET_EXTRACT> --service-account=<COMPUTE_ENGINE_DEFAULT_SERVICE_ACCOUNT>
 
     gcloud functions deploy extractTextMadeInAustralia --runtime python39 --trigger-resource <BUCKET_EXTRACT> --trigger-event google.storage.object.finalize --memory=1024MB --set-env-vars PROJECT_ID=<PROJECT_ID>,DATASTORE_EXTRACT=<DATASTORE_EXTRACT> --service-account=<COMPUTE_ENGINE_DEFAULT_SERVICE_ACCOUNT>
 
