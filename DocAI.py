@@ -285,7 +285,7 @@ def preprocess(str, process):
 
 
 """
- Was playing around with NLP API but wasn't useful
+ Was playing around with NLP API but wasn't useful for this use case
  Analyzing Entities in a String
     Args:
       text_content The text content to analyze
