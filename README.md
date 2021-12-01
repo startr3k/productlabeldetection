@@ -98,6 +98,8 @@ Run the following, replacing MODEL_ID with value obtained above :
     gsutil cp *.jpg gs://<BUCKET_LABEL>
 
 2. Take note of the new files extracted in gs://<BUCKET_EXTRACT> and the new Entities created in Datastore
+ 
+**Note the images must be in .GIF format (since that is a lossless image type, and can be used in both html img tags and Document AI)**
 
 ## Buid the application on Cloud Build
 
