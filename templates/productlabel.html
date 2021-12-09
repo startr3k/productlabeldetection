@@ -7,9 +7,6 @@
   <script src="/package.js"></script>
 
   <title>Product Label Detection</title>
-  <style type="text/css">
-
-  </style>
 
   <script>
 
@@ -22,21 +19,22 @@
       <a style='padding-left: 10px;'>Welcome {{user}}</a>
       <a class="brand-logo center">Product Label Detection</a>
   </nav>
-  <ul class="left" id="nav-mobile">
+
+  <ul class="left">
     <div class="wrapper">
       <button class="btn default" id="readLabelBtn" onclick="readLabel()">Read Label</button>
     </div>
   </ul>
 
-    <aside class="thumbnails" id="pictures">
+  <aside class="thumbnails" id="pictures">
 
-    {% for product in products %}
-    <a href="#" class="thumbnail" data-big="/{{product}}" onclick="displayProduct(this);">
-      <div class="thumbnail-image" style="background-image: url('https://storage.googleapis.com/ir0nmanproductlabel/{{product}}')"></div>
-    </a>
-    {% endfor %}
+  {% for product in products %}
+  <a href="#" class="thumbnail" data-big="/{{product}}" onclick="displayProduct(this);">
+    <div class="thumbnail-image" style="background-image: url('https://storage.googleapis.com/ir0nmanproductlabel/{{product}}')"></div>
+  </a>
+  {% endfor %}
 
-    </aside>
+  </aside>
 
   <div class="productlabel" id="productlabel"><input type="hidden" id="labelme" value="/{{firstProduct}}"></div>
 
