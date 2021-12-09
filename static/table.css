@@ -17,7 +17,7 @@ body {
   background-image: none;
   background-color: transparent;
   content: url("https://storage.googleapis.com/ir0nmanproductlabel/0.gif");
-  left: 300px;
+  left: 150px;
   top: 124px;
   width: 988px;
 }
@@ -25,7 +25,7 @@ body {
   position: absolute;
   top: 124px;
   width: 620px;
-  left: 1353px;
+  left: 1200px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
 }
@@ -33,7 +33,7 @@ body {
 /* CSS */
 .button-17 {
   align-items: center;
-  left: 1353px;
+  left: 1200px;
   appearance: none;
   background-color: #fff;
   border-radius: 24px;
@@ -108,7 +108,7 @@ body {
   color: black;
   cursor: pointer;
   align-items: center;
-  left: 1453px;
+  left: 1300px;
   font-family: "Google Sans",Roboto,Arial,sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -178,7 +178,8 @@ body {
 }
 
 .black {
-  background-color: #000 !important
+  background-color: #000 !important;
+  width: 100% !important;
 }
 
 nav {
@@ -230,7 +231,7 @@ nav .brand-logo.center {
 }
 
 .thumbnails {
-  width: 300px;
+  width: 150px;
 
 }
 
