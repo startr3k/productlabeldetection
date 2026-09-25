@@ -114,6 +114,22 @@ Run the following, replacing MODEL_ID with value obtained above :
 
     Go to Cloud Run, and access the webpage with the URL given
 
+## Running the tests
+
+The suite in `tests/` drives the Flask routes, `middleware`, and the
+`DocAI.parse_table` / `preprocess` logic with every Google Cloud and Firebase
+boundary mocked. It needs no credentials and no network, and deliberately does
+not install `requirements.txt` (its pins do not build on modern Python).
+
+    python -m venv .venv
+    . .venv/bin/activate
+    pip install -r requirements-dev.txt
+    python -m pytest
+
+Known bugs are captured as `xfail` tests, each with a reason referencing the
+issue it documents. They become failures if the behavior is fixed and the test
+is not tightened up, which keeps the list honest.
+
 
 ***(By default Cloud Run uses the default compute engine service account. If a separate service account is required, just change the commands above accordingly)***
 

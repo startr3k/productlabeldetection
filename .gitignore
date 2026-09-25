@@ -1,2 +1,13 @@
 .*
+
+# Keep the CI workflow tracked despite the dotfile rule above.
 !/.gitignore
+!/.github
+!/.github/**
+
+# Python build and test artifacts
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.coverage
