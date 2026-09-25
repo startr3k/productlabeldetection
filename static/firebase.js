@@ -68,12 +68,16 @@ function signInGoogle() {
       displayName = result.user.displayName;
       user = result.user;
 
-      return fetch('/verify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: 'email=' +result.user.email, // send application data (vote)
+      return result.user.getIdToken().then(token => {
+        return fetch('/verify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: `Bearer ${token}`,
+          },
+          // The server derives the email from the verified token, so no email
+          // is sent here.
+        })
       })
 
   }).then (response => response.text())

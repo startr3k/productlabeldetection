@@ -18,33 +18,42 @@ from typing import Any, Callable, Dict
 
 import firebase_admin
 from firebase_admin import auth  # noqa: F401
-from flask import request, Response
+from flask import g, request, Response
 import structlog
 
 
 default_app = firebase_admin.initialize_app()
-displayName = ""
 
 # [START cloudrun_user_auth_jwt]
 def jwt_authenticated(func: Callable[..., int]) -> Callable[..., int]:
     @wraps(func)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
         header = request.headers.get("Authorization", None)
-        if header:
-            token = header.split(" ")[1]
-            try:
-                decoded_token = firebase_admin.auth.verify_id_token(token)
-            except Exception as e:
-                logger.exception(e)
-                return Response(status=403, response=f"Error with authentication: {e}")
-        else:
+        if not header:
             return Response(status=401)
 
-        request.uid = decoded_token["uid"]
-        global displayName
-        displayName = firebase_admin.auth.get_user(request.uid).display_name
-        displayName = firebase_admin.auth.get_user(request.uid).email if displayName is None else displayName
-        displayName = "" if displayName is None else displayName
+        parts = header.split(" ")
+        if len(parts) != 2 or parts[0].lower() != "bearer" or not parts[1]:
+            return Response(status=400, response="Malformed Authorization header")
+
+        try:
+            decoded_token = firebase_admin.auth.verify_id_token(parts[1])
+        except Exception as e:
+            logger.exception(e)
+            # Log the detail but never echo the exception back to the caller.
+            return Response(status=403, response="Invalid or expired token")
+
+        user = firebase_admin.auth.get_user(decoded_token["uid"])
+
+        # Identity is stored on the request context so concurrent requests cannot
+        # observe each other's user. It is always derived from the verified
+        # token, never from client-supplied values.
+        g.uid = decoded_token["uid"]
+        g.email = user.email or ""
+        g.display_name = user.display_name or g.email
+
+        # Kept for backwards compatibility with existing handlers.
+        request.uid = g.uid
 
         return func(*args, **kwargs)
 
@@ -89,6 +98,7 @@ def logging_flush() -> None:
     # Setting PYTHONUNBUFFERED in Dockerfile ensured no buffering
     pass
 
-def getDisplayName():
-    print ("Name is " +displayName)
-    return displayName
+def getDisplayName() -> str:
+    # Request-scoped: reads the identity the decorator stored on flask.g.
+    # Deliberately does not log the user's name or email.
+    return getattr(g, "display_name", "")

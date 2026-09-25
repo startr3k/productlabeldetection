@@ -31,8 +31,10 @@ def test_invalid_token_is_forbidden(protected_client):
     )
 
     assert response.status_code == 403
-    # The raw exception text is echoed back to the caller (issue 16).
-    assert "Error with authentication" in response.get_data(as_text=True)
+    # The detail is logged, not echoed back to the caller.
+    body = response.get_data(as_text=True)
+    assert "invalid token" not in body
+    assert "Traceback" not in body
 
 
 def test_valid_token_runs_handler_and_sets_uid(protected_client):
@@ -42,20 +44,20 @@ def test_valid_token_runs_handler_and_sets_uid(protected_client):
     assert "uid=uid-alice" in response.get_data(as_text=True)
 
 
-@pytest.mark.xfail(
-    reason="jwt_authenticated does header.split(' ')[1] without bounds checking, "
-    "so a malformed Authorization header raises IndexError (issue 15)"
-)
 def test_malformed_authorization_header_returns_400(protected_client):
     response = protected_client.get("/protected", headers={"Authorization": "Bearer"})
 
     assert response.status_code == 400
 
 
-@pytest.mark.xfail(
-    reason="middleware.displayName is a module global, so a concurrent request "
-    "can overwrite the name rendered for another user (issue 2)"
-)
+def test_non_bearer_authorization_header_returns_400(protected_client):
+    response = protected_client.get(
+        "/protected", headers={"Authorization": "Basic dXNlcjpwYXNz"}
+    )
+
+    assert response.status_code == 400
+
+
 def test_display_name_is_not_shared_across_concurrent_requests(
     app_module, auth, storage_blobs, monkeypatch
 ):
@@ -66,7 +68,7 @@ def test_display_name_is_not_shared_across_concurrent_requests(
 
     def delayed_get_display_name():
         # Hold alice's request after her token was verified but before the page
-        # renders, so bob's request can overwrite the shared displayName.
+        # renders, so bob's request can try to overwrite the shared identity.
         if not state["delayed"]:
             state["delayed"] = True
             alice_verified.set()

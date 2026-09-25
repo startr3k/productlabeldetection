@@ -61,18 +61,34 @@ def test_scan_runs_parse_table_with_bare_filename(
     assert seen["filename"] == "a.gif"
 
 
-def test_verify_known_user_returns_one(client, datastore_results):
+def test_scan_uses_token_identity_not_client_input(
+    client, auth, app_module, monkeypatch, storage_blobs
+):
+    storage_blobs([Blob("a.gif")])
+    monkeypatch.setattr(app_module, "parse_table", lambda filename: ["", ""])
+
+    body = client.post(
+        "/package",
+        headers=AUTH_HEADER,
+        data={"img": "/a.gif", "user": "<script>alert(1)</script>"},
+    ).get_data(as_text=True)
+
+    assert "<script>alert(1)</script>" not in body
+    assert "alice@example.com" in body
+
+
+def test_verify_known_user_returns_one(client, auth, datastore_results):
     datastore_results([object()])
 
-    response = client.post("/verify", data={"email": "alice@example.com"})
+    response = client.post("/verify", headers=AUTH_HEADER)
 
     assert response.get_data(as_text=True) == "1"
 
 
-def test_verify_unknown_user_returns_zero(client, datastore_results):
+def test_verify_unknown_user_returns_zero(client, auth, datastore_results):
     datastore_results([])
 
-    response = client.post("/verify", data={"email": "nobody@example.com"})
+    response = client.post("/verify", headers=AUTH_HEADER)
 
     assert response.get_data(as_text=True) == "0"
 
@@ -83,20 +99,22 @@ def test_scan_without_image_returns_400(client, auth, app_module):
     assert response.status_code == 400
 
 
-def test_verify_without_email_returns_400(client):
-    assert client.post("/verify", data={}).status_code == 400
-
-
-@pytest.mark.xfail(
-    reason="/verify has no @jwt_authenticated decorator, so it answers "
-    "unauthenticated callers and leaks whether an email is registered (issue 4)"
-)
 def test_verify_requires_authentication(client, datastore_results):
     datastore_results([object()])
 
-    response = client.post("/verify", data={"email": "alice@example.com"})
+    assert client.post("/verify").status_code == 401
 
-    assert response.status_code == 401
+
+def test_verify_queries_the_token_email_not_client_input(client, auth, datastore_results):
+    captured = datastore_results([object()])
+
+    # A caller cannot probe whether an arbitrary address is registered.
+    response = client.post(
+        "/verify", headers=AUTH_HEADER, data={"email": "attacker@example.com"}
+    )
+
+    assert response.get_data(as_text=True) == "1"
+    assert captured["filters"] == [("Email", "=", "alice@example.com")]
 
 
 @pytest.mark.xfail(

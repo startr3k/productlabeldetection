@@ -15,14 +15,7 @@ import sys
 import types
 from unittest import mock
 
-import flask
-import markupsafe
 import pytest
-
-# main.py does ``from flask import ... Markup ...``, which Flask 2.3+ removed.
-# Shim it so the app module imports under a modern Flask.
-if not hasattr(flask, "Markup"):
-    flask.Markup = markupsafe.Markup
 
 
 def _mod(name: str) -> types.ModuleType:
@@ -158,18 +151,6 @@ def _install_stubs() -> None:
 _install_stubs()
 
 
-@pytest.fixture(autouse=True)
-def _reset_middleware_display_name():
-    """middleware keeps a process-global displayName; isolate tests from it."""
-    middleware = sys.modules.get("middleware")
-    if middleware is not None:
-        middleware.displayName = ""
-    yield
-    middleware = sys.modules.get("middleware")
-    if middleware is not None:
-        middleware.displayName = ""
-
-
 @pytest.fixture
 def app_module():
     """Import the Flask app and reset its module-level state."""
@@ -225,11 +206,18 @@ def storage_blobs(monkeypatch, app_module):
 
 @pytest.fixture
 def datastore_results(monkeypatch, app_module):
-    """Replace google.cloud.datastore.Client with a fixed query result set."""
+    """Replace google.cloud.datastore.Client with a fixed query result set.
+
+    Returns a dict that records filters passed to add_filter, so tests can
+    assert which value was actually queried.
+    """
 
     def _set(entities):
+        captured = {}
+
         class _Query:
-            def add_filter(self, *args, **kwargs):
+            def add_filter(self, field, op, value):
+                captured.setdefault("filters", []).append((field, op, value))
                 return self
 
             def fetch(self):
@@ -240,5 +228,6 @@ def datastore_results(monkeypatch, app_module):
             "Client",
             lambda *a, **k: types.SimpleNamespace(query=lambda kind=None, **kw: _Query()),
         )
+        return captured
 
     return _set

@@ -18,7 +18,8 @@ import signal
 import sys
 from DocAI import parse_table
 from types import FrameType
-from flask import Flask, render_template, request, Response, Markup, jsonify
+from flask import Flask, g, render_template, request, Response, jsonify
+from markupsafe import Markup
 import middleware
 from middleware import jwt_authenticated, logger, getDisplayName
 from google.cloud import datastore, storage
@@ -62,7 +63,7 @@ def view_package() -> str:
     if productlist:
         firstprod = productlist[0]
 
-    return render_template("productlabel.html",user=Markup(getDisplayName()),products=productlist,firstProduct=firstprod)
+    return render_template("productlabel.html",user=getDisplayName(),products=productlist,firstProduct=firstprod)
 
 """
  Page that calls the DocAI.py function parse_table
@@ -79,15 +80,23 @@ def hello_world() -> str:
     if productlist:
         firstprod = productlist[0]
 
-    return render_template("productlabel.html", ingredients=Markup(extracted_text[0]),others=Markup(extracted_text[1]),user=request.form["user"],products=productlist,firstProduct=firstprod)
+    # 'ingredients' is HTML assembled by DocAI from escaped cell values, so it
+    # is safe to mark up. 'others' is plain OCR text and stays escaped by Jinja.
+    return render_template("productlabel.html", ingredients=Markup(extracted_text[0]),others=extracted_text[1],user=getDisplayName(),products=productlist,firstProduct=firstprod)
 
 """
  Page that ensure the user is a legit one, by verifying against Datastore
  To give new user access through Google account, just add them as a new entity in Datastore
 """
 @app.route("/verify", methods=["POST"])
+@jwt_authenticated
 def verify_users() -> str:
-    email = request.form["email"]
+    # The email comes from the verified Firebase token, not from client input,
+    # so a caller cannot probe whether an arbitrary address is registered.
+    email = g.email
+    if not email:
+        return "0"
+
     # Instantiates a client
     client = datastore.Client()
     # The Cloud Datastore key for the new entity
@@ -95,12 +104,8 @@ def verify_users() -> str:
     query.add_filter("Email", "=", email)
     # Prepares the new entity
     results = list(query.fetch())
-    i = 0
-    if results:
-        for entity in results:
-            i += 1
 
-    return "1" if i>0 else "0"
+    return "1" if results else "0"
 
 if __name__ == "__main__":
     # handles Ctrl-C locally

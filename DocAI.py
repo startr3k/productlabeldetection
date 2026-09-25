@@ -27,6 +27,7 @@ from PIL import Image, ImageDraw, ImageEnhance
 import matplotlib.pyplot as plt
 from skimage import data, io
 from skimage.filters import threshold_otsu
+import html
 import numpy as np
 import pandas as pd
 import os
@@ -112,7 +113,7 @@ def parse_table(filename):
                 # print("Header Row {}: {}".format(row_num, cells))
                 if _detectIngredientsTbl(table):
 
-                        str[0] += "<thead><tr><th colspan='42'><input type='hidden' id='productLinked' file='"+filename +"'></input>Nutrition Information</th></tr></thead>"
+                        str[0] += "<thead><tr><th colspan='42'><input type='hidden' id='productLinked' file='"+html.escape(filename) +"'></input>Nutrition Information</th></tr></thead>"
 
                         tmp = "<tr>"
                         discard = False
@@ -122,7 +123,7 @@ def parse_table(filename):
 
                             for cell in row.cells:
                                 cell = _get_text(cell.layout).rstrip().lstrip()
-                                tmp += "<td>" +cell +"</td>"
+                                tmp += "<td>" + html.escape(cell) + "</td>"
                         else:
                             discard = True
 
@@ -153,7 +154,7 @@ def parse_table(filename):
                                         cell = preprocess(cell, process)
                                         
                                     # print (cell)
-                                    tmp += "<td>" +cell +"</td>"
+                                    tmp += "<td>" + html.escape(cell) + "</td>"
                                 
                             else:
                                 discard = True

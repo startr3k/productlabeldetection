@@ -108,3 +108,30 @@ def test_query_datastore_returns_empty_when_entity_missing(monkeypatch):
     _patch_datastore(monkeypatch, [])
 
     assert DocAI.query_datastore("sample.gif") == ""
+
+
+def test_cell_text_is_html_escaped(fake_document):
+    fake_document(
+        build_document(
+            NUTRITION_HEADER,
+            [
+                ["Energy", "<script>alert(1)</script>"],
+                ["Protein", "5.2"],
+                ["Fat", "3"],
+                ["Carbohydrate", "2"],
+            ],
+        )
+    )
+
+    html = DocAI.parse_table("sample.gif")[0]
+
+    assert "<script>" not in html
+    assert "&lt;script&gt;" in html
+
+
+def test_filename_is_html_escaped(fake_document):
+    fake_document(build_document(NUTRITION_HEADER, NUTRITION_BODY))
+
+    html = DocAI.parse_table("bad'><script>alert(1)</script>.gif")[0]
+
+    assert "<script>" not in html
