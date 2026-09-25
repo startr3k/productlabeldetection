@@ -9,7 +9,9 @@
   <title>Product Label Detection</title>
 
   <script>
-
+    // Base URL for product images, supplied by the server so no bucket name is
+    // baked into the client assets.
+    window.STORAGE_BASE = {{ storage_base|tojson }};
   </script>
 </head>
 
@@ -30,7 +32,7 @@
 
   {% for product in products %}
   <a href="#" class="thumbnail" data-big="/{{product}}" onclick="displayProduct(this);">
-    <div class="thumbnail-image" style="background-image: url('https://storage.googleapis.com/ir0nmanproductlabel/{{product}}')"></div>
+    <div class="thumbnail-image" style="background-image: url('{{ storage_base }}/{{product}}')"></div>
   </a>
   {% endfor %}
 

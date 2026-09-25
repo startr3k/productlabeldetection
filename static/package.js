@@ -70,7 +70,7 @@ async function readLabel()
 function displayProduct (el) 
 {
     newSelection = el.getAttribute('data-big');
-    img = document.getElementById('productlabel').style.content = "url(" +"https://storage.googleapis.com/ir0nmanproductlabel" +newSelection + ")";
+    img = document.getElementById('productlabel').style.content = "url(" +(window.STORAGE_BASE || "") +newSelection + ")";
     x = el.parentNode.getElementsByClassName('thumbnail');
     var i;
     for (i = 0; i < x.length; i++) 

@@ -11,3 +11,11 @@ __pycache__/
 .venv/
 .pytest_cache/
 .coverage
+
+# Secrets: service account keys, environment files, credentials
+key.json
+*-key.json
+service-account*.json
+.env
+.env.*
+!.env.example

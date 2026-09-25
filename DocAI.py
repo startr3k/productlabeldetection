@@ -13,12 +13,18 @@
  limitations under the License.
  """
 
-# CHANGE THESE GLOBAL VARIABLES
-PROJECT_ID = ''
-LOCATION = 'us' # Format is 'us' or 'eu'
-BUCKET = ''
-BUCKET_EXTRACT = ''
-DATASTORE_EXTRACT = 'Extractions'
+import html
+import os
+
+
+# Configuration is read from the environment so the same image can run against
+# different Google Cloud projects. Cloud Run and Cloud Functions supply these as
+# environment variables; locally they can be exported in the shell.
+PROJECT_ID = os.environ.get("PROJECT_ID", "")
+LOCATION = os.environ.get("LOCATION", "us")  # Format is 'us' or 'eu'
+BUCKET = os.environ.get("BUCKET_LABEL", "")
+BUCKET_EXTRACT = os.environ.get("BUCKET_EXTRACT", "")
+DATASTORE_EXTRACT = os.environ.get("DATASTORE_EXTRACT", "Extractions")
 
 
 from google.cloud import documentai_v1beta3, documentai_v1beta2, language_v1, storage, datastore
@@ -27,10 +33,8 @@ from PIL import Image, ImageDraw, ImageEnhance
 import matplotlib.pyplot as plt
 from skimage import data, io
 from skimage.filters import threshold_otsu
-import html
 import numpy as np
 import pandas as pd
-import os
 import re
 
 """

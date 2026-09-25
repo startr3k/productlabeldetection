@@ -117,6 +117,31 @@ def test_verify_queries_the_token_email_not_client_input(client, auth, datastore
     assert captured["filters"] == [("Email", "=", "alice@example.com")]
 
 
+def test_storage_base_follows_configured_bucket(app_module):
+    app_module.BUCKET_LABEL = "my-bucket"
+
+    assert app_module.storage_base() == "https://storage.googleapis.com/my-bucket"
+
+
+def test_storage_base_is_empty_when_unconfigured(app_module):
+    app_module.BUCKET_LABEL = ""
+
+    assert app_module.storage_base() == ""
+
+
+def test_rendered_page_uses_configured_bucket(
+    client, auth, storage_blobs, app_module
+):
+    # The bucket name must come from configuration, not from baked-in assets.
+    app_module.BUCKET_LABEL = "my-bucket"
+    storage_blobs([Blob("a.gif")])
+
+    body = client.get("/package", headers=AUTH_HEADER).get_data(as_text=True)
+
+    assert "https://storage.googleapis.com/my-bucket/a.gif" in body
+    assert "ir0nmanproductlabel" not in body
+
+
 @pytest.mark.xfail(
     reason="productlist is a module global populated by GET /package, so on a "
     "fresh worker POST /package renders an empty firstProduct (issue 13)"
