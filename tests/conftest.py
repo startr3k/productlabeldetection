@@ -15,14 +15,7 @@ import sys
 import types
 from unittest import mock
 
-import flask
-import markupsafe
 import pytest
-
-# main.py does ``from flask import ... Markup ...``, which Flask 2.3+ removed.
-# Shim it so the app module imports under a modern Flask.
-if not hasattr(flask, "Markup"):
-    flask.Markup = markupsafe.Markup
 
 
 def _mod(name: str) -> types.ModuleType:
