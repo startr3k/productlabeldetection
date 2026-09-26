@@ -9,10 +9,11 @@ name: open-pr-on-assign
 #    branch does not have, so the branch gets a single empty commit. The diff
 #    stays empty until the assignee pushes real work.
 #
-# 2. CI does not run on that first commit. Pushes and pull requests made with
-#    GITHUB_TOKEN deliberately do not trigger further workflow runs, so tests.yml
-#    stays idle until a person pushes to the branch. Use a personal access token
-#    or a GitHub App token instead if the checks must start immediately.
+# 2. The branch push does not trigger CI, but opening the pull request does.
+#    Pushes made with GITHUB_TOKEN never start workflow runs, so there is no
+#    push-event run for the initial empty commit. The pull_request event from
+#    gh pr create is not suppressed the same way: tests.yml runs against the
+#    pull request immediately (observed on the first auto-created PR, #24).
 #
 # 3. Only the copy of this file on the default branch runs. Editing it on a
 #    feature branch has no effect until that branch is merged.
@@ -101,9 +102,9 @@ jobs:
           commit, which is the minimum GitHub needs to open a pull request. Push
           your work to it and mark the pull request ready for review when it is.
 
-          CI has not run on the initial commit, because a push made with
-          GITHUB_TOKEN does not trigger workflows. The first push from a person
-          starts the checks.
+          The branch push did not trigger a push-event CI run (pushes made with
+          GITHUB_TOKEN never do), but opening this pull request fired the
+          pull_request event, so the test suite has already run against it.
           EOF
           )
 
