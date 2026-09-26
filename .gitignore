@@ -1,2 +1,13 @@
+# Ignore dotfiles by default, then re-admit the ones the repo needs tracked.
+# Without the .github exceptions below, git cannot see the CI workflow at all.
 .*
 !/.gitignore
+!/.github
+!/.github/**
+
+# Python build and test artifacts
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.coverage

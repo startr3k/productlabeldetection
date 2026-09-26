@@ -114,6 +114,26 @@ Run the following, replacing MODEL_ID with value obtained above :
 
     Go to Cloud Run, and access the webpage with the URL given
 
+## Tests
+
+The suite in `tests/` covers the Flask routes, `middleware.jwt_authenticated`,
+and the `DocAI.parse_table` / `preprocess` logic. Every Google Cloud and Firebase
+boundary is stubbed in `tests/conftest.py`, so it needs no credentials, no
+network, and no Google Cloud project.
+
+**Tests run in CI, not locally.** `.github/workflows/tests.yml` executes them on
+every push to any branch and on every pull request, and that is the only place
+they are expected to run. There is no local setup step to keep current, and no
+reason for a contributor to install anything to get feedback: push the branch and
+read the check. The workflow installs `requirements-dev.txt` and never
+`requirements.txt`, because the production pins do not build on a current Python
+(see issues #4 and #16).
+
+Known bugs are recorded as `xfail` tests whose reasons name the issue they
+document. `xfail_strict` is on, so fixing one of those bugs turns its test into
+an unexpected pass and fails the run, which forces the test to be tightened in
+the same change instead of silently drifting.
+
 
 ***(By default Cloud Run uses the default compute engine service account. If a separate service account is required, just change the commands above accordingly)***
 
