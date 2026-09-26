@@ -22,7 +22,6 @@ DATASTORE_EXTRACT = 'Extractions'
 
 
 from google.cloud import documentai_v1beta3, documentai_v1beta2, language_v1, storage, datastore
-from wand.image import Image as WImage
 from PIL import Image, ImageDraw, ImageEnhance
 import matplotlib.pyplot as plt
 from skimage import data, io

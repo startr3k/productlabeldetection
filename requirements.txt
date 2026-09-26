@@ -68,6 +68,5 @@ tifffile==2024.8.30
 typing_extensions==4.16.0
 uritemplate==4.2.0
 urllib3==2.6.3
-Wand==0.6.6
 Werkzeug==3.1.8
 zipp==3.23.1

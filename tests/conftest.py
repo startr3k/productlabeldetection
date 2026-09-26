@@ -127,11 +127,6 @@ def _install_stubs() -> None:
     matplotlib_pyplot = _mod("matplotlib.pyplot")
     matplotlib.pyplot = matplotlib_pyplot
 
-    wand = _mod("wand")
-    wand_image = _mod("wand.image")
-    wand.image = wand_image
-    wand_image.Image = _simple_type("Image")
-
     skimage = _mod("skimage")
     for submodule_name in ("data", "io", "filters"):
         submodule = _mod(f"skimage.{submodule_name}")
