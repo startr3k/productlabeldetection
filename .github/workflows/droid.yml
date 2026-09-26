@@ -36,3 +36,9 @@ jobs:
         uses: Factory-AI/droid-action@main
         with:
           factory_api_key: ${{ secrets.FACTORY_API_KEY }}
+          # open-pr-on-assign.yml summons Droid by putting an @droid instruction
+          # in the pull requests it creates. Those PRs are authored by
+          # github-actions[bot], and the action rejects non-human actors unless
+          # they are listed here. The permission check passes on its own for
+          # [bot] actors; only the human-actor check needs this.
+          allowed_bots: "github-actions[bot]"

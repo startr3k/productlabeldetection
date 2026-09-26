@@ -3,7 +3,7 @@ name: open-pr-on-assign
 # Opens a draft pull request whenever an issue is assigned, so the assignee gets
 # a branch and a review thread without setting them up by hand.
 #
-# Three behaviours to know before relying on this:
+# Four behaviours to know before relying on this:
 #
 # 1. The pull request starts empty. GitHub needs at least one commit the base
 #    branch does not have, so the branch gets a single empty commit. The diff
@@ -17,6 +17,15 @@ name: open-pr-on-assign
 #
 # 3. Only the copy of this file on the default branch runs. Editing it on a
 #    feature branch has no effect until that branch is merged.
+#
+# 4. The pull request body mentions @droid, which is how the Droid session is
+#    summoned: droid.yml reacts to the mention in the opened pull request and
+#    starts working on the issue. The droid-action deliberately has no
+#    assignee trigger (it is disabled in the action's source), so a direct call
+#    on this `assigned` event would no-op; the mention in the PR body is the
+#    supported path. This costs one Droid run per assignment, and requires
+#    droid.yml to list github-actions[bot] in allowed_bots, because the pull
+#    request is bot-authored.
 
 on:
   issues:
@@ -97,6 +106,11 @@ jobs:
           Opened automatically because #${ISSUE_NUMBER} was assigned to @${ASSIGNEE}.
 
           Closes #${ISSUE_NUMBER}
+
+          @droid work on this: implement what #${ISSUE_NUMBER} describes and push
+          your commits to the \`${BRANCH}\` branch. Read the linked issue for the
+          requirements, keep the change scoped to it, and run the test suite
+          before pushing.
 
           This starts as an empty draft. The branch \`${BRANCH}\` holds one empty
           commit, which is the minimum GitHub needs to open a pull request. Push
