@@ -1,0 +1,122 @@
+name: open-pr-on-assign
+
+# Opens a draft pull request whenever an issue is assigned, so the assignee gets
+# a branch and a review thread without setting them up by hand.
+#
+# Three behaviours to know before relying on this:
+#
+# 1. The pull request starts empty. GitHub needs at least one commit the base
+#    branch does not have, so the branch gets a single empty commit. The diff
+#    stays empty until the assignee pushes real work.
+#
+# 2. CI does not run on that first commit. Pushes and pull requests made with
+#    GITHUB_TOKEN deliberately do not trigger further workflow runs, so tests.yml
+#    stays idle until a person pushes to the branch. Use a personal access token
+#    or a GitHub App token instead if the checks must start immediately.
+#
+# 3. Only the copy of this file on the default branch runs. Editing it on a
+#    feature branch has no effect until that branch is merged.
+
+on:
+  issues:
+    types: [assigned]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  # Assigning several people in quick succession fires one event each. Serialise
+  # them so the duplicate check below cannot race against itself.
+  group: open-pr-on-assign-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Derive the branch name from the issue
+        id: branch
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          slug=$(printf '%s' "$ISSUE_TITLE" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed -E 's/[^a-z0-9]+/-/g' \
+            | cut -c1-48 \
+            | sed -E 's/^-+|-+$//g')
+          echo "name=issue-${ISSUE_NUMBER}${slug:+-$slug}" >> "$GITHUB_OUTPUT"
+
+      - name: Check whether work is already under way
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.branch.outputs.name }}
+        run: |
+          # Re-assigning an issue, or adding a second assignee, fires this
+          # workflow again. Neither should produce a duplicate branch or PR.
+          if [ -n "$(gh pr list --repo "$GITHUB_REPOSITORY" --state open \
+                       --head "$BRANCH" --json number --jq '.[].number')" ]; then
+            echo "A pull request for $BRANCH is already open; nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          elif git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            echo "Branch $BRANCH already exists on the remote; leaving it alone."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create the branch
+        if: steps.check.outputs.skip == 'false'
+        env:
+          BRANCH: ${{ steps.branch.outputs.name }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$BRANCH"
+          git commit --allow-empty -m "Start work on #${ISSUE_NUMBER}: ${ISSUE_TITLE}"
+          git push -u origin "$BRANCH"
+
+      - name: Open the draft pull request
+        if: steps.check.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.branch.outputs.name }}
+          BASE: ${{ github.event.repository.default_branch }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ASSIGNEE: ${{ github.event.assignee.login }}
+        run: |
+          body=$(cat <<EOF
+          Opened automatically because #${ISSUE_NUMBER} was assigned to @${ASSIGNEE}.
+
+          Closes #${ISSUE_NUMBER}
+
+          This starts as an empty draft. The branch \`${BRANCH}\` holds one empty
+          commit, which is the minimum GitHub needs to open a pull request. Push
+          your work to it and mark the pull request ready for review when it is.
+
+          CI has not run on the initial commit, because a push made with
+          GITHUB_TOKEN does not trigger workflows. The first push from a person
+          starts the checks.
+          EOF
+          )
+
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --base "$BASE" \
+            --head "$BRANCH" \
+            --title "$ISSUE_TITLE" \
+            --body "$body" \
+            --draft
+
+          # Done as a separate edit so that an assignee the token cannot set
+          # (an outside collaborator, for instance) warns instead of failing the
+          # run and leaving a branch with no pull request.
+          gh pr edit "$BRANCH" --repo "$GITHUB_REPOSITORY" --add-assignee "$ASSIGNEE" \
+            || echo "::warning::Could not assign @${ASSIGNEE} to the pull request."
