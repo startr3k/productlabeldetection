@@ -1,0 +1,8 @@
+# Test dependencies, installed by CI. Kept separate from requirements.txt on
+# purpose: the production pins (numpy==1.19.5, Pillow==8.3.1, Flask==2.0.1,
+# google-cloud-* 1.x, firebase-admin==5.0.2, ...) do not install on a current
+# Python and would need live Google Cloud credentials. The suite stubs every
+# Google Cloud / Firebase boundary and imports no scientific stack, so these
+# installable versions are all it needs.
+Flask>=3.0
+pytest>=8.0
