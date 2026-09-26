@@ -30,3 +30,4 @@ jobs:
           automatic_review: true
           automatic_security_review: true
           review_depth: shallow
+          allowed_bots: '*'
