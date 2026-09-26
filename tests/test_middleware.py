@@ -31,8 +31,9 @@ def test_invalid_token_is_forbidden(protected_client):
     )
 
     assert response.status_code == 403
-    # Not yet filed: the raw exception text is echoed to the caller, which is
-    # more internal detail than an auth failure should return.
+    # issue #22: the raw exception text is echoed to the caller, which is more
+    # internal detail than an auth failure should return. Tighten this assertion
+    # when that is fixed.
     assert "Error with authentication" in response.get_data(as_text=True)
 
 
@@ -54,8 +55,9 @@ def test_display_name_falls_back_to_email(app_module, auth, storage_blobs, clien
 
 
 @pytest.mark.xfail(
-    reason="not yet filed: jwt_authenticated does header.split(' ')[1] with no "
-    "bounds check, so a malformed Authorization header raises IndexError"
+    reason="issue #21: jwt_authenticated does header.split(' ')[1] with no bounds "
+    "check, and outside the try block, so a malformed Authorization header "
+    "raises IndexError and returns 500"
 )
 def test_malformed_authorization_header_is_handled(protected_client):
     response = protected_client.get("/protected", headers={"Authorization": "Bearer"})
