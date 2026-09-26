@@ -127,7 +127,7 @@ they are expected to run. There is no local setup step to keep current, and no
 reason for a contributor to install anything to get feedback: push the branch and
 read the check. The workflow installs `requirements-dev.txt` and never
 `requirements.txt`, because the production pins do not build on a current Python
-(see issues #4 and #16).
+(see issue #16).
 
 Known bugs are recorded as `xfail` tests whose reasons name the issue they
 document. `xfail_strict` is on, so fixing one of those bugs turns its test into

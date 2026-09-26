@@ -18,7 +18,8 @@ import signal
 import sys
 from DocAI import parse_table
 from types import FrameType
-from flask import Flask, render_template, request, Response, Markup, jsonify
+from flask import Flask, render_template, request, Response, jsonify
+from markupsafe import Markup
 import middleware
 from middleware import jwt_authenticated, logger, getDisplayName
 from google.cloud import datastore, storage
