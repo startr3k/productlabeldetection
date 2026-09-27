@@ -1,6 +1,5 @@
 import os
-import io
-from google.cloud import storage, documentai_v1beta2, datastore
+from google.cloud import documentai_v1beta2, datastore
 
 def extractTextMadeInAustralia(event, context):
     """Triggered by a change to a Cloud Storage bucket.

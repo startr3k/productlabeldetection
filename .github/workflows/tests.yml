@@ -29,6 +29,11 @@ jobs:
         # dependency is needed to run it. See issues #4 and #16.
         run: pip install -r requirements-dev.txt
 
+      - name: Ruff (unused imports, F401)
+        # The trimmed requirements must stay in sync with the code: any
+        # import the modules no longer use is a dead dependency (and a
+        # larger, slower, more fragile image). F401 catches every one.
+        run: ruff check --select F401 .
       - name: Run tests
         # `python -m pytest` rather than `pytest`: the repo modules live at the
         # root, and this puts the working directory on sys.path. pytest.ini also
